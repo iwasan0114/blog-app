@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 管理者認証の確認関数
+    function isAdmin() {
+      return request.auth != null 
+        && request.auth.uid != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // blogs コレクション
+    match /blogs/{blogId} {
+      allow read, write: if isAdmin();
+      
+      // バリデーション
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasAll(['title', 'content', 'status', 'authorId', 'createdAt', 'updatedAt'])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.content is string
+        && request.resource.data.content.size() <= 10000
+        && request.resource.data.status in ['draft', 'published']
+        && request.resource.data.authorId == request.auth.uid;
+        
+      allow update: if isAdmin()
+        && request.resource.data.authorId == resource.data.authorId
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+    
+    // members コレクション
+    match /members/{memberId} {
+      allow read, write: if isAdmin();
+      
+      // バリデーション
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasAll(['name', 'category', 'position', 'description', 'isActive', 'createdAt', 'updatedAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 50
+        && request.resource.data.category in ['teacher', 'student']
+        && request.resource.data.position is string
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 500
+        && request.resource.data.isActive is bool;
+        
+      allow update: if isAdmin()
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+    
+    // users コレクション
+    match /users/{userId} {
+      allow read: if isAdmin() && userId == request.auth.uid;
+      allow write: if false; // 管理者アカウントの作成・更新は別途実装
+    }
+  }
+}

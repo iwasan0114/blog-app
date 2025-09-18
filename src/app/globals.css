@@ -74,3 +74,63 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* ブログ記事用のスタイル */
+  .prose {
+    @apply text-foreground max-w-none;
+  }
+  
+  .prose h1 {
+    @apply text-3xl font-bold text-foreground mb-4;
+  }
+  
+  .prose h2 {
+    @apply text-2xl font-semibold text-foreground mb-3;
+  }
+  
+  .prose h3 {
+    @apply text-xl font-semibold text-foreground mb-2;
+  }
+  
+  .prose p {
+    @apply text-foreground mb-4 leading-relaxed;
+  }
+  
+  .prose ul, .prose ol {
+    @apply text-foreground mb-4 ml-6;
+  }
+  
+  .prose li {
+    @apply mb-1;
+  }
+  
+  .prose blockquote {
+    @apply border-l-4 border-primary pl-4 italic text-muted-foreground mb-4;
+  }
+  
+  .prose code {
+    @apply bg-muted px-1 py-0.5 rounded text-sm font-mono;
+  }
+  
+  .prose pre {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4;
+  }
+  
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  
+  /* カスタムクラス */
+  .container-custom {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .card-hover {
+    @apply transition-shadow duration-200 hover:shadow-lg;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent;
+  }
+}
