@@ -508,7 +508,7 @@ export type CreateType<T> = WithoutId<WithoutTimestamps<T>>;
 /**
  * 更新用型（ID・作成日時を除いた部分更新可能型）
  */
-export type UpdateType<T> = PartialBy<WithoutId<WithoutTimestamps<T>>, 'updatedAt'>;
+export type UpdateType<T> = Partial<WithoutId<WithoutTimestamps<T>>>;
 
 // ===============================
 // エラー処理関連型
