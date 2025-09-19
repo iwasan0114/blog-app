@@ -1,9 +1,10 @@
 'use client';
 
 import { redirect } from 'next/navigation';
+import { LoginForm } from '@/components/auth/LoginForm';
 import { useAuth } from '@/hooks/useAuth';
 
-export default function Home() {
+export default function LoginPage() {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
@@ -17,12 +18,9 @@ export default function Home() {
     );
   }
 
-  // 認証状態に基づいてリダイレクト
   if (isAuthenticated) {
     redirect('/dashboard');
-  } else {
-    redirect('/login');
   }
 
-  return null;
+  return <LoginForm />;
 }

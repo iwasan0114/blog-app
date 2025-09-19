@@ -3,7 +3,11 @@
 import { redirect } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 
-export default function Home() {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
@@ -11,18 +15,15 @@ export default function Home() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-muted-foreground">読み込み中...</p>
+          <p className="mt-2 text-muted-foreground">認証を確認中...</p>
         </div>
       </div>
     );
   }
 
-  // 認証状態に基づいてリダイレクト
-  if (isAuthenticated) {
-    redirect('/dashboard');
-  } else {
+  if (!isAuthenticated) {
     redirect('/login');
   }
 
-  return null;
-}
+  return <>{children}</>;
+};
