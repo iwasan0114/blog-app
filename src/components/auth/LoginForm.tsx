@@ -16,9 +16,7 @@ const loginSchema = z.object({
     .string()
     .min(1, 'メールアドレスは必須です')
     .email('有効なメールアドレスを入力してください'),
-  password: z
-    .string()
-    .min(1, 'パスワードは必須です')
+  password: z.string().min(1, 'パスワードは必須です'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -35,13 +33,13 @@ export const LoginForm: React.FC = () => {
     resolver: zodResolver(loginSchema),
   });
 
-
   const onSubmit = async (data: LoginFormData) => {
     try {
       setError('');
       await login(data.email, data.password);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'ログインに失敗しました';
+      const errorMessage =
+        err instanceof Error ? err.message : 'ログインに失敗しました';
       setError(errorMessage);
     }
   };

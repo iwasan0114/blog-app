@@ -72,9 +72,9 @@ describe('useAuthGuard', () => {
   describe('認証済み一般ユーザー', () => {
     test('認証済み一般ユーザーの処理', () => {
       // Given: 一般ユーザーが認証済み
-      const mockUser = { 
-        id: '1', 
-        email: 'user@example.com', 
+      const mockUser = {
+        id: '1',
+        email: 'user@example.com',
         name: 'Test User',
         role: 'user',
         createdAt: new Date(),
@@ -101,9 +101,9 @@ describe('useAuthGuard', () => {
   describe('認証済み管理者', () => {
     test('管理者ユーザーの処理', () => {
       // Given: 管理者が認証済み
-      const mockAdmin = { 
-        id: '1', 
-        email: 'admin@example.com', 
+      const mockAdmin = {
+        id: '1',
+        email: 'admin@example.com',
         name: 'Admin User',
         role: 'admin',
         createdAt: new Date(),

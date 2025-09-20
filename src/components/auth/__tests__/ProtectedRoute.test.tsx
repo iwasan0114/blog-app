@@ -5,7 +5,9 @@ import { AuthGuard } from '../AuthGuard';
 
 // AuthGuardをモック
 jest.mock('../AuthGuard', () => ({
-  AuthGuard: jest.fn(({ children }) => <div data-testid="auth-guard">{children}</div>),
+  AuthGuard: jest.fn(({ children }) => (
+    <div data-testid="auth-guard">{children}</div>
+  )),
 }));
 
 describe('ProtectedRoute', () => {
@@ -91,7 +93,7 @@ describe('ProtectedRoute', () => {
       const customFallback = <div>Loading...</div>;
 
       render(
-        <ProtectedRoute 
+        <ProtectedRoute
           requireAdmin={true}
           redirectTo="/admin-login"
           fallback={customFallback}

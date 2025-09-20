@@ -1,7 +1,8 @@
 // Firebase Admin SDKを使用してデモユーザーを作成するスクリプト
 // 実際の運用では、Firebase Consoleまたは適切な管理ツールを使用してください
 
-import { adminAuth, adminFirestore } from '../lib/firebase-admin';
+import { initializeFirebaseAdmin, getFirestore } from '../lib/firebase-admin';
+import { getAuth } from 'firebase-admin/auth';
 
 const DEMO_USER = {
   email: 'admin@example.com',
@@ -12,6 +13,12 @@ const DEMO_USER = {
 
 export async function createDemoUser() {
   try {
+    // Firebase Admin SDKを初期化
+    initializeFirebaseAdmin();
+
+    const adminAuth = getAuth();
+    const adminFirestore = getFirestore();
+
     // 1. Firebase Authenticationにユーザーを作成
     const userRecord = await adminAuth.createUser({
       email: DEMO_USER.email,

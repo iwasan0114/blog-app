@@ -34,13 +34,13 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
     return (
       fallback || (
         <div className="flex items-center justify-center min-h-screen">
-          <div 
-            data-testid="auth-loading" 
+          <div
+            data-testid="auth-loading"
             className="text-center"
             role="status"
             aria-label="認証状態を確認中"
           >
-            <div 
+            <div
               className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"
               aria-hidden="true"
             ></div>
@@ -60,12 +60,12 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
   if (requireAdmin && !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div 
+        <div
           className="text-center max-w-md mx-auto px-4"
           role="alert"
           aria-labelledby="access-denied-title"
         >
-          <h1 
+          <h1
             id="access-denied-title"
             className="text-2xl font-bold text-gray-900 mb-4"
           >

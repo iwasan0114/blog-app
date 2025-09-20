@@ -32,9 +32,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchUserData = async (firebaseUser: FirebaseUser): Promise<User> => {
     try {
       // Firestoreからユーザー情報を取得（オフラインエラーの場合はスキップ）
-      const userDoc = await getDoc(
-        doc(firestore, 'users', firebaseUser.uid)
-      );
+      const userDoc = await getDoc(doc(firestore, 'users', firebaseUser.uid));
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -59,8 +57,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (firestoreError) {
       // Firestoreエラー（オフラインなど）の場合は Firebase Auth の情報のみを使用
-      const errorMessage = firestoreError instanceof Error ? firestoreError.message : 'Firestore接続エラー';
-      console.warn('Firestore接続エラー（Firebase Authの情報のみ使用）:', errorMessage);
+      const errorMessage =
+        firestoreError instanceof Error
+          ? firestoreError.message
+          : 'Firestore接続エラー';
+      console.warn(
+        'Firestore接続エラー（Firebase Authの情報のみ使用）:',
+        errorMessage
+      );
       return {
         id: firebaseUser.uid,
         email: firebaseUser.email!,
@@ -75,41 +79,52 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string): Promise<void> => {
     try {
       setIsLoading(true);
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
       // ログイン成功時にユーザー情報を直接取得・設定
       const userData = await fetchUserData(userCredential.user);
       setUser(userData);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false); // エラー時に先にisLoadingをfalseに
-      
+
       let errorMessage = 'ログインに失敗しました';
-      
+
       // Firebase Authエラーの場合のみcodeプロパティを確認
       if (error && typeof error === 'object' && 'code' in error) {
         switch (error.code) {
-        case 'auth/invalid-credential':
-        case 'auth/wrong-password':
-        case 'auth/user-not-found':
-          errorMessage = 'メールアドレスまたはパスワードが正しくありません';
-          break;
-        case 'auth/invalid-email':
-          errorMessage = '有効なメールアドレスを入力してください';
-          break;
-        case 'auth/too-many-requests':
-          errorMessage = 'ログイン試行回数が上限に達しました。しばらく時間をおいてからお試しください';
-          break;
-        case 'auth/network-request-failed':
-          errorMessage = 'ネットワークエラーが発生しました。インターネット接続を確認してください';
-          break;
-        default:
-          if (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
-            errorMessage = `ログインエラー: ${error.message}`;
-          }
+          case 'auth/invalid-credential':
+          case 'auth/wrong-password':
+          case 'auth/user-not-found':
+            errorMessage = 'メールアドレスまたはパスワードが正しくありません';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = '有効なメールアドレスを入力してください';
+            break;
+          case 'auth/too-many-requests':
+            errorMessage =
+              'ログイン試行回数が上限に達しました。しばらく時間をおいてからお試しください';
+            break;
+          case 'auth/network-request-failed':
+            errorMessage =
+              'ネットワークエラーが発生しました。インターネット接続を確認してください';
+            break;
+          default:
+            if (
+              error &&
+              typeof error === 'object' &&
+              'message' in error &&
+              typeof error.message === 'string'
+            ) {
+              errorMessage = `ログインエラー: ${error.message}`;
+            }
         }
       }
-      
+
       throw new Error(errorMessage);
     }
   };

@@ -10,13 +10,9 @@ interface ProtectedRouteProps extends Omit<AuthGuardProps, 'children'> {
 /**
  * @deprecated Use AuthGuard instead for better flexibility and features
  */
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  ...authGuardProps 
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  ...authGuardProps
 }) => {
-  return (
-    <AuthGuard {...authGuardProps}>
-      {children}
-    </AuthGuard>
-  );
+  return <AuthGuard {...authGuardProps}>{children}</AuthGuard>;
 };

@@ -64,7 +64,9 @@ describe('AuthGuard', () => {
         logout: jest.fn(),
       });
 
-      const customFallback = <div data-testid="custom-loading">Custom Loading</div>;
+      const customFallback = (
+        <div data-testid="custom-loading">Custom Loading</div>
+      );
 
       // When: AuthGuardを描画
       render(
@@ -152,7 +154,9 @@ describe('AuthGuard', () => {
 
       // Then: 権限不足エラーメッセージが表示される
       expect(screen.getByText('アクセス権限がありません')).toBeInTheDocument();
-      expect(screen.getByText('このページにアクセスするには管理者権限が必要です。')).toBeInTheDocument();
+      expect(
+        screen.getByText('このページにアクセスするには管理者権限が必要です。')
+      ).toBeInTheDocument();
       expect(screen.queryByText('Protected Content')).not.toBeInTheDocument();
     });
   });
@@ -239,8 +243,12 @@ describe('AuthGuard', () => {
 
       // Then: 適切なエラーメッセージが表示される
       expect(screen.getByText('アクセス権限がありません')).toBeInTheDocument();
-      expect(screen.getByText('このページにアクセスするには管理者権限が必要です。')).toBeInTheDocument();
-      expect(screen.getByText('権限が不足しています。管理者にお問い合わせください。')).toBeInTheDocument();
+      expect(
+        screen.getByText('このページにアクセスするには管理者権限が必要です。')
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('権限が不足しています。管理者にお問い合わせください。')
+      ).toBeInTheDocument();
     });
   });
 });
