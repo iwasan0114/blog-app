@@ -6,6 +6,32 @@ global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 
 // Mock Web APIs
+global.Headers = class Headers {
+  constructor(init = {}) {
+    this._headers = new Map(Object.entries(init))
+  }
+
+  get(key) {
+    return this._headers.get(key.toLowerCase())
+  }
+
+  set(key, value) {
+    this._headers.set(key.toLowerCase(), value)
+  }
+
+  has(key) {
+    return this._headers.has(key.toLowerCase())
+  }
+
+  entries() {
+    return this._headers.entries()
+  }
+
+  *[Symbol.iterator]() {
+    yield* this._headers.entries()
+  }
+}
+
 global.Response = class Response {
   constructor(body, init = {}) {
     this._body = body
@@ -31,11 +57,7 @@ global.Request = class Request {
     Object.defineProperty(this, 'url', { value: url, writable: false })
     Object.defineProperty(this, 'method', { value: init.method || 'GET', writable: false })
     Object.defineProperty(this, 'headers', { 
-      value: {
-        get: (key) => (init.headers || {})[key],
-        has: (key) => key in (init.headers || {}),
-        ...init.headers
-      }, 
+      value: new Headers(init.headers || {}), 
       writable: false 
     })
     this._body = init.body
